@@ -1,13 +1,24 @@
-import streamlit as st
 import os
+#from dotenv import load_dotenv
+import streamlit as st
 import time
 import glob
-import os
 from gtts import gTTS
 from PIL import Image
+import PyPDF2
+from PyPDF2 import PdfReader
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.chains.question_answering import load_qa_chain
+from langchain.llms import OpenAI
+from langchain.callbacks import get_openai_callback
 
 st.title("El Burro y El Lobo")
 image = Image.open('fabula-burro-lobo.jpg')
+ke = st.text_input('Ingresa tu Clave')
+#os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+os.environ['OPENAI_API_KEY'] = ke
 
 st.image(image, width=300)
 
@@ -48,10 +59,6 @@ if st.button("convertir"):
     audio_bytes = audio_file.read()
     st.markdown(f"## Tú audio:")
     st.audio(audio_bytes, format="audio/mp3", start_time=0)
-
-    #if display_output_text:
-    st.markdown(f"## Texto en audio:")
-    st.write(f" {output_text}")
 
 
 def remove_files(n):
